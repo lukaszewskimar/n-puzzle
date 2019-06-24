@@ -4,8 +4,11 @@ namespace n_puzzle
 {
     class Branch
     {
+        // Koszt (liczba kroków podjętych do bieżącego stanu)
         private readonly int g;
+        // Szacowana odległość do celu
         private readonly int h;
+
         private readonly Puzzle puzzle;
         private readonly Puzzle goal;
         private readonly State state;
