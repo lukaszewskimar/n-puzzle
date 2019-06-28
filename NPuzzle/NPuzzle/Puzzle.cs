@@ -2,7 +2,7 @@
 
 namespace n_puzzle
 {
-    internal class Puzzle
+    public class Puzzle
     {
         public int[,] template;
 

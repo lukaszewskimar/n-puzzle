@@ -1,6 +1,6 @@
 ﻿namespace n_puzzle
 {
-    enum State
+    public enum State
     {
         Start,
         MoveLeft,

@@ -1,6 +1,6 @@
 ﻿namespace n_puzzle
 {
-    class Point
+    public class Point
     {
         private readonly int x;
         private readonly int y;

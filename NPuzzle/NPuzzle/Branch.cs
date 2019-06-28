@@ -2,7 +2,7 @@
 
 namespace n_puzzle
 {
-    class Branch
+    public class Branch
     {
         // Koszt (liczba kroków podjętych do bieżącego stanu)
         private readonly int g;
@@ -42,6 +42,11 @@ namespace n_puzzle
             get { return puzzle; }
         }
 
+        public State State
+        {
+            get { return state; }
+        }
+
         private int SetH(Puzzle puzzle, Puzzle goal)
         {
             int h = 0;
@@ -57,7 +62,7 @@ namespace n_puzzle
                         {
                             for (int l = 0; l < goal.template.GetLength(1); l++)
                             {
-                                if (puzzle.template[i, j] == goal.template[k, l])
+                                if (puzzle.template[i, j] == goal.template[k, l] && puzzle.template[i, j] != 0)
                                 {
                                     Point pointG = new Point(l, k);
                                     h += this.ManhattanDistance(pointS, pointG);
@@ -67,7 +72,7 @@ namespace n_puzzle
                     }
                 }
             }
-            return h / 2;
+            return h;
         }
 
         private int ManhattanDistance(Point S, Point G)
