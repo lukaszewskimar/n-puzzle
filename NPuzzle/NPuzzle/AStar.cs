@@ -21,7 +21,7 @@ namespace NPuzzle
             this.goalState = _goalState;
         }
 
-        public Result Run(CancellationToken cancellationToken)
+        public Result Run(CancellationToken cancellationToken, Heuristic heuristic)
         {
             // Zbiór open
             List<Branch> open = new List<Branch>();
@@ -30,7 +30,7 @@ namespace NPuzzle
             List<Branch> closed = new List<Branch>();
 
             // INIT: Pobranie węzła startowego initialState i umieszczenie go w zbiorze open
-            Branch branch = new Branch(0, initialState, goalState, State.Start);
+            Branch branch = new Branch(0, initialState, goalState, State.Start, heuristic);
             open.Add(branch);
 
             while (open.Count > 0)
@@ -62,7 +62,7 @@ namespace NPuzzle
 
                                     if (nLeft != null)
                                     {
-                                        var nLeftBranch = new Branch(n.G + 1, nLeft, goalState, State.MoveLeft);
+                                        var nLeftBranch = new Branch(n.G + 1, nLeft, goalState, State.MoveLeft, heuristic);
 
                                         // Jeśli nLeft nie należy do zbioru OPEN ani do CLOSED to dodaj go do zbioru OPEN i ustaw: g(nLeft) = gLeft,  f(nLeft) = gLeft + h(nLeft)
                                         if (open.Any(o => o.Puzzle.Equals(nLeft)) == false && closed.Any(c => c.Puzzle.Equals(nLeft)) == false)
@@ -94,7 +94,7 @@ namespace NPuzzle
 
                                     if (nRight != null)
                                     {
-                                        var nRightBranch = new Branch(n.G + 1, nRight, goalState, State.MoveRight);
+                                        var nRightBranch = new Branch(n.G + 1, nRight, goalState, State.MoveRight, heuristic);
 
                                         // Jeśli nRight nie należy do zbioru OPEN ani do CLOSED to dodaj go do zbioru OPEN i ustaw: g(nRight) = gRight,  f(nRight) = gRight + h(nRight)
                                         if (open.Any(o => o.Puzzle.Equals(nRight)) == false && closed.Any(c => c.Puzzle.Equals(nRight)) == false)
@@ -125,7 +125,7 @@ namespace NPuzzle
 
                                     if (nUp != null)
                                     {
-                                        var nUpBranch = new Branch(n.G + 1, nUp, goalState, State.MoveUp);
+                                        var nUpBranch = new Branch(n.G + 1, nUp, goalState, State.MoveUp, heuristic);
 
                                         // Jeśli nUp nie należy do zbioru OPEN ani do CLOSED to dodaj go do zbioru OPEN i ustaw: g(nUp) = gUp,  f(nUp) = gUp + h(nUp)
                                         if (open.Any(o => o.Puzzle.Equals(nUp)) == false && closed.Any(c => c.Puzzle.Equals(nUp)) == false)
@@ -156,7 +156,7 @@ namespace NPuzzle
 
                                     if (nDown != null)
                                     {
-                                        var nDownBranch = new Branch(n.G + 1, nDown, goalState, State.MoveDown);
+                                        var nDownBranch = new Branch(n.G + 1, nDown, goalState, State.MoveDown, heuristic);
 
                                         // Jeśli nDown nie należy do zbioru OPEN ani do CLOSED to dodaj go do zbioru OPEN i ustaw: g(nDown) = gDown,  f(nDown) = gDown + h(nDown)
                                         if (open.Any(o => o.Puzzle.Equals(nDown)) == false && closed.Any(c => c.Puzzle.Equals(nDown)) == false)

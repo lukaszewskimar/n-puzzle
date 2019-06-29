@@ -12,14 +12,16 @@ namespace n_puzzle
         private readonly Puzzle puzzle;
         private readonly Puzzle goal;
         private readonly State state;
+        private readonly Heuristic heuristic;
 
-        public Branch(int _g, Puzzle _puzzle, Puzzle _goal, State _state)
+        public Branch(int _g, Puzzle _puzzle, Puzzle _goal, State _state, Heuristic _heuristic)
         {
             g = _g;
-            h = this.SetH(_puzzle, _goal);
+            h = this.SetH(_puzzle, _goal, _heuristic);
             puzzle = _puzzle;
             goal = _goal;
             state = _state;
+            heuristic = _heuristic;
         }
 
         public int G
@@ -47,31 +49,55 @@ namespace n_puzzle
             get { return state; }
         }
 
-        private int SetH(Puzzle puzzle, Puzzle goal)
+        private int SetH(Puzzle puzzle, Puzzle goal, Heuristic heuristic)
         {
             int h = 0;
-            for (int i = 0; i < puzzle.template.GetLength(0); i++)
+            switch (heuristic)
             {
-                for (int j = 0; j < puzzle.template.GetLength(1); j++)
-                {
-                    if (puzzle.template[i, j] != goal.template[i, j])
+                case Heuristic.ManhattanDistance:
                     {
-                        Point pointS = new Point(j, i);
-
-                        for (int k = 0; k < goal.template.GetLength(0); k++)
+                        for (int i = 0; i < puzzle.template.GetLength(0); i++)
                         {
-                            for (int l = 0; l < goal.template.GetLength(1); l++)
+                            for (int j = 0; j < puzzle.template.GetLength(1); j++)
                             {
-                                if (puzzle.template[i, j] == goal.template[k, l] && puzzle.template[i, j] != 0)
+                                if (puzzle.template[i, j] != goal.template[i, j])
                                 {
-                                    Point pointG = new Point(l, k);
-                                    h += this.ManhattanDistance(pointS, pointG);
+                                    Point pointS = new Point(j, i);
+
+                                    for (int k = 0; k < goal.template.GetLength(0); k++)
+                                    {
+                                        for (int l = 0; l < goal.template.GetLength(1); l++)
+                                        {
+                                            if (puzzle.template[i, j] == goal.template[k, l] && puzzle.template[i, j] != 0)
+                                            {
+                                                Point pointG = new Point(l, k);
+                                                h += this.ManhattanDistance(pointS, pointG);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
+                        break;
                     }
-                }
+                case Heuristic.HammingDistance:
+                    {
+                        for (int i = 0; i < puzzle.template.GetLength(0); i++)
+                        {
+                            for (int j = 0; j < puzzle.template.GetLength(1); j++)
+                            {
+                                if (puzzle.template[i, j] != goal.template[i, j] && puzzle.template[i, j] != 0)
+                                {
+                                    h++;            
+                                }
+                            }
+                        }
+                        break;
+                    }
             }
+
+         
+
             return h;
         }
 

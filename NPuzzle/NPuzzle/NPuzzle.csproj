@@ -51,8 +51,9 @@
   <ItemGroup>
     <Compile Include="AStar.cs" />
     <Compile Include="Branch.cs" />
-    <Compile Include="Models\HeuristicsTypes.cs" />
+    <Compile Include="Models\HeuristicType.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\State.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>

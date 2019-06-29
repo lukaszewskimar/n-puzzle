@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NPuzzle.Models
 {
-    class HeuristicsTypes
+    class HeuristicType
     {
         public int ID { get; set; }
         public string DisplayName { get; set; }

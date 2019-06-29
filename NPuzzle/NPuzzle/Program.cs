@@ -588,9 +588,9 @@ namespace n_puzzle
             puzzletype_comboBox.ValueMember = "N";
             puzzletype_comboBox.DisplayMember = "DisplayName";
 
-            List<HeuristicsTypes> types = new List<HeuristicsTypes>();
-            types.Add(new HeuristicsTypes() { ID = 1, DisplayName = "Manhattan Distance" });
-            types.Add(new HeuristicsTypes() { ID = 2, DisplayName = "Hamming Distance" });
+            List<HeuristicType> types = new List<HeuristicType>();
+            types.Add(new HeuristicType() { ID = 1, DisplayName = "Manhattan Distance" });
+            types.Add(new HeuristicType() { ID = 2, DisplayName = "Hamming Distance" });
 
             heuristics_comboBox.DataSource = types;
             heuristics_comboBox.ValueMember = "ID";
@@ -715,11 +715,13 @@ namespace n_puzzle
             this.loading_panel.Visible = true;
             this.error_message.Visible = false;
             PuzzleType type = puzzletype_comboBox.SelectedItem as PuzzleType;
+            HeuristicType heuristic = heuristics_comboBox.SelectedItem as HeuristicType;
 
             int[,] initial = new int[type.N, type.N];
             // prepare initial state
             foreach (Control item in puzzle_panel.Controls.OfType<NumericUpDown>())
             {
+                item.Enabled = false;
                 string location = item.Name.Replace("i_", "");
                 int i = int.Parse(location.Split(',')[0]);
                 int j = int.Parse(location.Split(',')[1]);
@@ -740,7 +742,7 @@ namespace n_puzzle
             // prepare goal state
             foreach (Control item in goal_panel.Controls.OfType<NumericUpDown>())
             {
-
+                item.Enabled = false;
                 string location = item.Name.Replace("g_", "");
                 int i = int.Parse(location.Split(',')[0]);
                 int j = int.Parse(location.Split(',')[1]);
@@ -760,7 +762,7 @@ namespace n_puzzle
             try
             {
                 AStar aStar = new AStar(initialState, goalState);
-                Result result = await Task.Run(() => aStar.Run(cts.Token));
+                Result result = await Task.Run(() => aStar.Run(cts.Token, (Heuristic)heuristic.ID));
 
                 this.results_button.Visible = true;
                 this.results_panel.Visible = true;
@@ -798,6 +800,15 @@ namespace n_puzzle
                 this.heuristics_comboBox.Enabled = true;
                 this.start_button.Enabled = true;
                 this.stop_button.Enabled = false;
+
+                foreach (Control item in puzzle_panel.Controls.OfType<NumericUpDown>())
+                {
+                    item.Enabled = true;
+                }
+                foreach (Control item in goal_panel.Controls.OfType<NumericUpDown>())
+                {
+                    item.Enabled = true;
+                }
             }
         }
 
